@@ -1,88 +1,101 @@
-let questions = [];
-let assignments = JSON.parse(localStorage.getItem("assignments")) || [];
+const teacher = document.getElementById("teacher");
+const student = document.getElementById("student");
 
+const typeSelect = document.getElementById("type");
+const mcqBox = document.getElementById("mcqBox");
+
+let assignments = [];
+let questions = [];
+
+// Show panels
 function showTeacher() {
-  document.getElementById("teacherPanel").classList.remove("hidden");
-  document.getElementById("studentPanel").classList.add("hidden");
+  teacher.style.display = "block";
+  student.style.display = "none";
 }
 
 function showStudent() {
-  document.getElementById("studentPanel").classList.remove("hidden");
-  document.getElementById("teacherPanel").classList.add("hidden");
-  loadAssignments();
+  student.style.display = "block";
+  teacher.style.display = "none";
+  renderAssignments();
 }
 
+// MCQ toggle
+typeSelect.onchange = () => {
+  mcqBox.style.display = typeSelect.value === "mcq" ? "block" : "none";
+};
+
+// Add question
 function addQuestion() {
-  const type = document.getElementById("questionType").value;
-  const text = document.getElementById("questionText").value;
-  const marks = document.getElementById("marks").value;
-
-  let question = { type, text, marks };
-
-  if (type === "mcq") {
-    const opts = [...document.querySelectorAll(".opt")].map(o => o.value);
-    const correct = document.getElementById("correctOpt").value.toUpperCase();
-    question.options = opts;
-    question.correct = correct;
+  const qText = question.value.trim();
+  if (!qText) {
+    alert("Enter question");
+    return;
   }
 
-  questions.push(question);
-  renderTeacherQuestions();
+  let q = { text: qText, type: typeSelect.value };
+
+  if (typeSelect.value === "mcq") {
+    const opts = document.querySelectorAll(".opt");
+    q.options = [...opts].map(o => o.value);
+    q.correct = correct.value;
+  }
+
+  questions.push(q);
+  previewQuestions();
+  question.value = "";
 }
 
-function renderTeacherQuestions() {
-  const div = document.getElementById("teacherQuestions");
-  div.innerHTML = "";
+// Preview
+function previewQuestions() {
+  preview.innerHTML = "";
   questions.forEach((q, i) => {
-    div.innerHTML += `<div class="question-box">
-      <b>Q${i + 1} (${q.type})</b>: ${q.text}
-    </div>`;
+    const li = document.createElement("li");
+    li.textContent = `${i + 1}. ${q.text}`;
+    preview.appendChild(li);
   });
 }
 
+// Save assignment
 function saveAssignment() {
-  const title = document.getElementById("assignmentTitle").value;
-  assignments.push({ title, questions });
-  localStorage.setItem("assignments", JSON.stringify(assignments));
-  alert("Assignment Saved!");
+  const t = title.value.trim();
+  if (!t || questions.length === 0) {
+    alert("Add title and questions");
+    return;
+  }
+
+  assignments.push({ title: t, questions });
   questions = [];
-  renderTeacherQuestions();
+  preview.innerHTML = "";
+  title.value = "";
+  alert("Assignment saved!");
 }
 
-function loadAssignments() {
-  const list = document.getElementById("assignmentList");
-  list.innerHTML = "";
+// Student view
+function renderAssignments() {
+  assignmentsDiv = document.getElementById("assignments");
+  assignmentsDiv.innerHTML = "";
+
   assignments.forEach((a, i) => {
-    list.innerHTML += `<button onclick="attempt(${i})">${a.title}</button>`;
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<h3>${a.title}</h3>`;
+
+    a.questions.forEach((q, qi) => {
+      div.innerHTML += `<p><b>${qi + 1}.</b> ${q.text}</p>`;
+      if (q.type === "mcq") {
+        q.options.forEach(opt => {
+          div.innerHTML += `
+            <label>
+              <input type="radio" name="q${i}${qi}"> ${opt}
+            </label><br/>
+          `;
+        });
+      } else {
+        div.innerHTML += `<textarea placeholder="Your answer"></textarea>`;
+      }
+    });
+
+    div.innerHTML += `<button onclick="alert('Submitted!')">Submit</button>`;
+    assignmentsDiv.appendChild(div);
   });
-}
-
-function attempt(index) {
-  const assignment = assignments[index];
-  const area = document.getElementById("attemptArea");
-  area.innerHTML = `<h3>${assignment.title}</h3>`;
-
-  assignment.questions.forEach((q, i) => {
-    if (q.type === "mcq") {
-      area.innerHTML += `
-        <div>
-          <p>${q.text}</p>
-          ${q.options.map((o, idx) =>
-            `<label><input type="radio" name="q${i}" value="${String.fromCharCode(65+idx)}"/> ${o}</label>`
-          ).join("<br>")}
-        </div>`;
-    } else {
-      area.innerHTML += `
-        <div>
-          <p>${q.text}</p>
-          <textarea></textarea>
-        </div>`;
-    }
-  });
-
-  area.innerHTML += `<button onclick="submit()">Submit Assignment</button>`;
-}
-
-function submit() {
-  alert("Assignment submitted successfully!");
 }
