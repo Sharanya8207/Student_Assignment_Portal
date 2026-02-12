@@ -1,88 +1,88 @@
 let assignments = JSON.parse(localStorage.getItem("assignments")) || [];
-let selectedAssignmentIndex = null;
+let submissions = JSON.parse(localStorage.getItem("submissions")) || [];
 
-const assignmentList = document.getElementById("assignmentList");
-const modal = document.getElementById("modal");
+function openTeacher() {
+  hideAll();
+  teacherDashboard.classList.remove("hidden");
+}
 
-document.getElementById("assignmentForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+function openStudent() {
+  hideAll();
+  studentDashboard.classList.remove("hidden");
+}
 
+function goHome() {
+  hideAll();
+  roleScreen.classList.remove("hidden");
+}
+
+function hideAll() {
+  roleScreen.classList.add("hidden");
+  teacherDashboard.classList.add("hidden");
+  studentDashboard.classList.add("hidden");
+}
+
+function showCreateAssignment() {
+  createAssignment.classList.remove("hidden");
+  submissionsDiv.classList.add("hidden");
+}
+
+function addQuestion() {
+  const qDiv = document.createElement("div");
+  qDiv.innerHTML = `<textarea placeholder="Enter Question"></textarea>`;
+  questions.appendChild(qDiv);
+}
+
+function saveAssignment() {
+  const subject = document.getElementById("subject").value;
   const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
-  const deadline = document.getElementById("deadline").value;
+  const qs = [...questions.querySelectorAll("textarea")].map(q => q.value);
 
-  assignments.push({
-    title,
-    description,
-    deadline,
-    submission: null
-  });
-
+  assignments.push({ subject, title, questions: qs });
   localStorage.setItem("assignments", JSON.stringify(assignments));
-  e.target.reset();
-  renderAssignments();
-});
+  alert("Assignment Saved!");
+}
 
-function renderAssignments() {
-  assignmentList.innerHTML = "";
-
-  assignments.forEach((a, index) => {
-    const today = new Date().toISOString().split("T")[0];
-    let status = "Not Submitted";
-    let statusClass = "";
-
-    if (a.submission) {
-      status = "Submitted";
-      statusClass = "submitted";
-    } else if (today > a.deadline) {
-      status = "Late";
-      statusClass = "late";
-    }
-
+function viewAssignments() {
+  assignmentList.innerHTML = "<h3>Assignments</h3>";
+  assignments.forEach((a, i) => {
     assignmentList.innerHTML += `
-      <div class="assignment">
-        <h3>${a.title}</h3>
-        <p>${a.description}</p>
-        <p>Deadline: ${a.deadline}</p>
-        <p class="status ${statusClass}">Status: ${status}</p>
-        <button onclick="openModal(${index})">Submit</button>
-      </div>
-    `;
+      <div>
+        <b>${a.subject}</b> - ${a.title}
+        <button onclick="attempt(${i})">Attempt</button>
+      </div>`;
   });
+  assignmentList.classList.remove("hidden");
 }
 
-function openModal(index) {
-  selectedAssignmentIndex = index;
-  modal.style.display = "flex";
+function attempt(i) {
+  const a = assignments[i];
+  let html = `<h3>${a.title}</h3>`;
+  a.questions.forEach((q, idx) => {
+    html += `<p>${q}</p><textarea id="ans${idx}"></textarea>`;
+  });
+  html += `<button onclick="submit(${i})">Submit</button>`;
+  assignmentList.innerHTML = html;
 }
 
-function closeModal() {
-  modal.style.display = "none";
+function submit(i) {
+  submissions.push({ assignment: i, marks: Math.floor(Math.random() * 100) });
+  localStorage.setItem("submissions", JSON.stringify(submissions));
+  alert("Submitted Successfully");
 }
 
-function submitAssignment() {
-  const name = document.getElementById("studentName").value;
-  const file = document.getElementById("fileUpload").files[0];
-
-  if (!name || !file) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  if (!file.name.endsWith(".pdf")) {
-    alert("Only PDF files allowed");
-    return;
-  }
-
-  assignments[selectedAssignmentIndex].submission = {
-    student: name,
-    fileName: file.name,
-    submittedAt: new Date().toLocaleString()
-  };
-
-  localStorage.setItem("assignments", JSON.stringify(assignments));
-  closeModal();
-  renderAssignments();
+function viewScores() {
+  scoreList.innerHTML = "<h3>My Scores</h3>";
+  submissions.forEach(s => {
+    scoreList.innerHTML += `<p>Assignment ${s.assignment} : ${s.marks} marks</p>`;
+  });
+  scoreList.classList.remove("hidden");
 }
 
-renderAssignments();
+function viewSubmissions() {
+  submissionsDiv.innerHTML = "<h3>Student Submissions</h3>";
+  submissions.forEach(s => {
+    submissionsDiv.innerHTML += `<p>Assignment ${s.assignment} → ${s.marks} marks</p>`;
+  });
+  submissionsDiv.classList.remove("hidden");
+}
