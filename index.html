@@ -2,52 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Submission Portal</title>
+  <title>Assignment Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header>
-  <h1>🎓 Assignment Management Portal</h1>
-  <div class="role-switch">
-    <button onclick="showTeacher()">Teacher</button>
-    <button onclick="showStudent()">Student</button>
+  <h1>📘 Assignment Submission Portal</h1>
+  <div class="switch">
+    <button onclick="showTeacher()">👩‍🏫 Teacher</button>
+    <button onclick="showStudent()">🎓 Student</button>
   </div>
 </header>
 
-<!-- TEACHER PANEL -->
-<section id="teacherPanel" class="panel">
-  <h2>👩‍🏫 Teacher Dashboard</h2>
+<!-- TEACHER -->
+<section id="teacher" class="panel">
+  <h2>Create Assignment</h2>
 
-  <input id="assignmentTitle" placeholder="Assignment Title" />
-  <select id="questionType">
+  <input id="title" placeholder="Assignment Title" />
+
+  <select id="type">
     <option value="mcq">MCQ</option>
-    <option value="desc">Descriptive</option>
+    <option value="text">Descriptive</option>
   </select>
 
-  <textarea id="questionText" placeholder="Question"></textarea>
+  <textarea id="question" placeholder="Enter question"></textarea>
 
-  <div id="mcqOptions">
-    <input placeholder="Option A" class="opt" />
-    <input placeholder="Option B" class="opt" />
-    <input placeholder="Option C" class="opt" />
-    <input placeholder="Option D" class="opt" />
-    <input placeholder="Correct Option (A/B/C/D)" id="correctOpt" />
+  <div id="mcqBox">
+    <input class="opt" placeholder="Option A" />
+    <input class="opt" placeholder="Option B" />
+    <input class="opt" placeholder="Option C" />
+    <input class="opt" placeholder="Option D" />
+    <input id="correct" placeholder="Correct Option (A/B/C/D)" />
   </div>
-
-  <input id="marks" placeholder="Marks" type="number" />
 
   <button onclick="addQuestion()">➕ Add Question</button>
   <button onclick="saveAssignment()">💾 Save Assignment</button>
 
-  <div id="teacherQuestions"></div>
+  <h3>Questions</h3>
+  <ul id="preview"></ul>
 </section>
 
-<!-- STUDENT PANEL -->
-<section id="studentPanel" class="panel hidden">
-  <h2>👨‍🎓 Student Dashboard</h2>
-  <div id="assignmentList"></div>
-  <div id="attemptArea"></div>
+<!-- STUDENT -->
+<section id="student" class="panel">
+  <h2>Available Assignments</h2>
+  <div id="assignments"></div>
 </section>
 
 <script src="script.js"></script>
