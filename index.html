@@ -2,54 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Portal</title>
+  <title>Student Assignment Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header>
-  <h1>📘 Assignment Submission Portal</h1>
-  <div class="switch">
-    <button onclick="showTeacher()">👩‍🏫 Teacher</button>
-    <button onclick="showStudent()">🎓 Student</button>
+  <div class="container">
+    <h1>📚 Student Assignment Submission Portal</h1>
+
+    <!-- Assignment Creation -->
+    <section class="card">
+      <h2>Create Assignment (Teacher)</h2>
+      <form id="assignmentForm">
+        <input type="text" id="title" placeholder="Assignment Title" required />
+        <textarea id="description" placeholder="Assignment Description" required></textarea>
+        <input type="date" id="deadline" required />
+        <button type="submit">Create Assignment</button>
+      </form>
+    </section>
+
+    <!-- Assignment List -->
+    <section class="card">
+      <h2>Assignments</h2>
+      <div id="assignmentList"></div>
+    </section>
+
+    <!-- Submission Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Submit Assignment</h2>
+        <input type="text" id="studentName" placeholder="Student Name" />
+        <input type="file" id="fileUpload" accept=".pdf" />
+        <button onclick="submitAssignment()">Submit</button>
+        <button class="close" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+
   </div>
-</header>
 
-<!-- TEACHER -->
-<section id="teacher" class="panel">
-  <h2>Create Assignment</h2>
-
-  <input id="title" placeholder="Assignment Title" />
-
-  <select id="type">
-    <option value="mcq">MCQ</option>
-    <option value="text">Descriptive</option>
-  </select>
-
-  <textarea id="question" placeholder="Enter question"></textarea>
-
-  <div id="mcqBox">
-    <input class="opt" placeholder="Option A" />
-    <input class="opt" placeholder="Option B" />
-    <input class="opt" placeholder="Option C" />
-    <input class="opt" placeholder="Option D" />
-    <input id="correct" placeholder="Correct Option (A/B/C/D)" />
-  </div>
-
-  <button onclick="addQuestion()">➕ Add Question</button>
-  <button onclick="saveAssignment()">💾 Save Assignment</button>
-
-  <h3>Questions</h3>
-  <ul id="preview"></ul>
-</section>
-
-<!-- STUDENT -->
-<section id="student" class="panel">
-  <h2>Available Assignments</h2>
-  <div id="assignments"></div>
-</section>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
