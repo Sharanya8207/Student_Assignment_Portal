@@ -1,53 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Teacher Student Portal</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Education Portal</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ROLE SELECTION -->
-  <div id="roleScreen" class="center-screen">
-    <h1>Education Portal</h1>
-    <button class="big-btn" onclick="openTeacher()">Teacher</button>
-    <button class="big-btn student" onclick="openStudent()">Student</button>
-  </div>
+<div class="center">
+  <h1>Education Portal</h1>
 
-  <!-- TEACHER DASHBOARD -->
-  <div id="teacherDashboard" class="hidden">
-    <h2>Teacher Dashboard</h2>
-    <button onclick="showCreateAssignment()">Create Assignment</button>
-    <button onclick="viewSubmissions()">View Submissions</button>
-    <button onclick="goHome()">Logout</button>
+  <a href="teacher.html" class="big-btn teacher">Teacher</a>
+  <a href="student.html" class="big-btn student">Student</a>
+</div>
 
-    <!-- CREATE ASSIGNMENT -->
-    <div id="createAssignment" class="card hidden">
-      <h3>Create Assignment</h3>
-      <input id="subject" placeholder="Subject" />
-      <input id="title" placeholder="Assignment Title" />
-
-      <div id="questions"></div>
-      <button onclick="addQuestion()">+ Add Question</button>
-      <br><br>
-      <button class="primary" onclick="saveAssignment()">Save Assignment</button>
-    </div>
-
-    <!-- VIEW SUBMISSIONS -->
-    <div id="submissions" class="card hidden"></div>
-  </div>
-
-  <!-- STUDENT DASHBOARD -->
-  <div id="studentDashboard" class="hidden">
-    <h2>Student Dashboard</h2>
-    <button onclick="viewAssignments()">View Assignments</button>
-    <button onclick="viewScores()">My Scores</button>
-    <button onclick="goHome()">Logout</button>
-
-    <div id="assignmentList" class="card hidden"></div>
-    <div id="scoreList" class="card hidden"></div>
-  </div>
-
-<script src="script.js"></script>
 </body>
 </html>
