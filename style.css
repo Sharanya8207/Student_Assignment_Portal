@@ -1,11 +1,11 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  background: linear-gradient(120deg,#141e30,#243b55);
   color: white;
 }
 
-.center-screen {
+.center {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -14,31 +14,35 @@ body {
 }
 
 .big-btn {
-  width: 300px;
-  padding: 20px;
-  font-size: 24px;
+  width: 280px;
+  padding: 18px;
   margin: 15px;
-  border: none;
+  text-align: center;
+  font-size: 22px;
+  text-decoration: none;
+  color: white;
   border-radius: 10px;
-  cursor: pointer;
-  background: #ff9800;
 }
 
-.big-btn.student {
-  background: #4caf50;
+.teacher { background: #ff9800; }
+.student { background: #4caf50; }
+
+h1,h2,h3 {
+  text-align: center;
 }
 
-.hidden {
-  display: none;
+.menu {
+  text-align: center;
+  margin: 20px;
 }
 
 button {
   padding: 12px 20px;
   margin: 10px;
   font-size: 16px;
-  cursor: pointer;
   border-radius: 8px;
   border: none;
+  cursor: pointer;
 }
 
 .primary {
@@ -46,10 +50,20 @@ button {
   color: white;
 }
 
+.logout {
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  background: crimson;
+  border-radius: 8px;
+}
+
 .card {
   background: rgba(0,0,0,0.4);
+  margin: 20px auto;
   padding: 20px;
-  margin: 20px;
+  width: 90%;
+  max-width: 600px;
   border-radius: 10px;
 }
 
@@ -57,10 +71,10 @@ input, textarea {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
-  border-radius: 5px;
+  border-radius: 6px;
   border: none;
 }
 
-h1, h2, h3 {
-  text-align: center;
+.hidden {
+  display: none;
 }
