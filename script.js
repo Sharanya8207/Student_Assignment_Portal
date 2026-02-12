@@ -1,88 +1,88 @@
 let assignments = JSON.parse(localStorage.getItem("assignments")) || [];
 let submissions = JSON.parse(localStorage.getItem("submissions")) || [];
 
-function openTeacher() {
-  hideAll();
-  teacherDashboard.classList.remove("hidden");
-}
-
-function openStudent() {
-  hideAll();
-  studentDashboard.classList.remove("hidden");
-}
-
-function goHome() {
-  hideAll();
-  roleScreen.classList.remove("hidden");
-}
-
-function hideAll() {
-  roleScreen.classList.add("hidden");
-  teacherDashboard.classList.add("hidden");
-  studentDashboard.classList.add("hidden");
-}
-
-function showCreateAssignment() {
-  createAssignment.classList.remove("hidden");
-  submissionsDiv.classList.add("hidden");
+/* ---------- TEACHER ---------- */
+function showCreate() {
+  document.getElementById("createBox").classList.remove("hidden");
+  document.getElementById("submissionsBox").classList.add("hidden");
 }
 
 function addQuestion() {
-  const qDiv = document.createElement("div");
-  qDiv.innerHTML = `<textarea placeholder="Enter Question"></textarea>`;
-  questions.appendChild(qDiv);
+  const div = document.createElement("div");
+  div.innerHTML = `<textarea placeholder="Enter question"></textarea>`;
+  document.getElementById("questions").appendChild(div);
 }
 
 function saveAssignment() {
-  const subject = document.getElementById("subject").value;
-  const title = document.getElementById("title").value;
-  const qs = [...questions.querySelectorAll("textarea")].map(q => q.value);
+  const subject = subjectInput().value;
+  const title = titleInput().value;
+  const qs = [...document.querySelectorAll("#questions textarea")].map(q => q.value);
 
   assignments.push({ subject, title, questions: qs });
   localStorage.setItem("assignments", JSON.stringify(assignments));
-  alert("Assignment Saved!");
+
+  alert("Assignment Created!");
 }
 
-function viewAssignments() {
-  assignmentList.innerHTML = "<h3>Assignments</h3>";
+function viewSubmissions() {
+  const box = document.getElementById("submissionsBox");
+  box.innerHTML = "<h3>Submissions</h3>";
+
+  submissions.forEach(s => {
+    box.innerHTML += `<p>${s.title} → ${s.marks} marks</p>`;
+  });
+
+  box.classList.remove("hidden");
+  document.getElementById("createBox").classList.add("hidden");
+}
+
+/* ---------- STUDENT ---------- */
+function loadAssignments() {
+  const box = document.getElementById("assignmentBox");
+  box.innerHTML = "<h3>Assignments</h3>";
+
   assignments.forEach((a, i) => {
-    assignmentList.innerHTML += `
+    box.innerHTML += `
       <div>
         <b>${a.subject}</b> - ${a.title}
         <button onclick="attempt(${i})">Attempt</button>
       </div>`;
   });
-  assignmentList.classList.remove("hidden");
+
+  box.classList.remove("hidden");
 }
 
 function attempt(i) {
   const a = assignments[i];
+  const box = document.getElementById("assignmentBox");
+
   let html = `<h3>${a.title}</h3>`;
   a.questions.forEach((q, idx) => {
-    html += `<p>${q}</p><textarea id="ans${idx}"></textarea>`;
+    html += `<p>${q}</p><textarea></textarea>`;
   });
-  html += `<button onclick="submit(${i})">Submit</button>`;
-  assignmentList.innerHTML = html;
+
+  html += `<button onclick="submit('${a.title}')">Submit</button>`;
+  box.innerHTML = html;
 }
 
-function submit(i) {
-  submissions.push({ assignment: i, marks: Math.floor(Math.random() * 100) });
+function submit(title) {
+  const marks = Math.floor(Math.random() * 40) + 60;
+  submissions.push({ title, marks });
   localStorage.setItem("submissions", JSON.stringify(submissions));
-  alert("Submitted Successfully");
+  alert("Submitted Successfully!");
 }
 
 function viewScores() {
-  scoreList.innerHTML = "<h3>My Scores</h3>";
+  const box = document.getElementById("scoreBox");
+  box.innerHTML = "<h3>My Scores</h3>";
+
   submissions.forEach(s => {
-    scoreList.innerHTML += `<p>Assignment ${s.assignment} : ${s.marks} marks</p>`;
+    box.innerHTML += `<p>${s.title} : ${s.marks}</p>`;
   });
-  scoreList.classList.remove("hidden");
+
+  box.classList.remove("hidden");
 }
 
-function viewSubmissions() {
-  submissionsDiv.innerHTML = "<h3>Student Submissions</h3>";
-  submissions.forEach(s => {
-    submissionsDiv.innerHTML += `<p>Assignment ${s.assignment} → ${s.marks} marks</p>`;
-  });
-  submissionsDiv.classList.remove("hidden");
-}
+/* Helpers */
+function subjectInput(){ return document.getElementById("subject"); }
+function titleInput(){ return document.getElementById("title"); }
