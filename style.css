@@ -1,110 +1,66 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
-
 body {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  min-height: 100vh;
-  color: #fff;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: white;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 30px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.card {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 25px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-}
-
-.card h2 {
-  margin-bottom: 15px;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
-
-textarea {
-  resize: none;
-  height: 80px;
-}
-
-button {
-  background: #38bdf8;
-  border: none;
-  padding: 12px 20px;
-  color: #000;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #0ea5e9;
-}
-
-.assignment {
-  background: #020617;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-.assignment p {
-  margin: 5px 0;
-}
-
-.status {
-  font-weight: bold;
-}
-
-.late {
-  color: #f87171;
-}
-
-.submitted {
-  color: #4ade80;
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
+.center-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.modal-content {
-  background: #1e293b;
-  padding: 25px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
+.big-btn {
+  width: 300px;
+  padding: 20px;
+  font-size: 24px;
+  margin: 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #ff9800;
 }
 
-.close {
-  background: #ef4444;
-  margin-top: 10px;
+.big-btn.student {
+  background: #4caf50;
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+}
+
+.primary {
+  background: #2196f3;
+  color: white;
+}
+
+.card {
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: none;
+}
+
+h1, h2, h3 {
+  text-align: center;
 }
