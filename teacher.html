@@ -1,38 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Teacher Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <h2>Teacher Dashboard</h2>
-  <a href="index.html" class="logout">Logout</a>
-</header>
+<h2>Teacher Dashboard</h2>
 
-<div class="container">
-  <div class="btn-group">
-    <button onclick="showCreate()">Create Assignment</button>
-    <button onclick="viewSubmissions()">View Submissions</button>
-  </div>
+<input id="subject" placeholder="Subject">
+<input id="title" placeholder="Assignment Title">
 
-  <div id="createBox" class="card hidden">
-    <h3>Create Assignment</h3>
+<div id="questions"></div>
 
-    <input id="subject" placeholder="Subject Name">
-    <input id="title" placeholder="Assignment Title">
+<button onclick="addMCQ()">➕ Add MCQ</button>
+<button onclick="saveAssignment()">💾 Save Assignment</button>
 
-    <div id="questions"></div>
+<hr>
 
-    <button class="secondary" onclick="addQuestion()">➕ Add Question</button>
-    <button class="primary" onclick="saveAssignment()">💾 Save Assignment</button>
-  </div>
-
-  <div id="submissionsBox" class="card hidden"></div>
-</div>
+<h3>Student Results</h3>
+<div id="results"></div>
 
 <script src="script.js"></script>
 </body>
