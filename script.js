@@ -1,88 +1,88 @@
+let questions = [];
 let assignments = JSON.parse(localStorage.getItem("assignments")) || [];
-let selectedAssignmentIndex = null;
 
-const assignmentList = document.getElementById("assignmentList");
-const modal = document.getElementById("modal");
+function showTeacher() {
+  document.getElementById("teacherPanel").classList.remove("hidden");
+  document.getElementById("studentPanel").classList.add("hidden");
+}
 
-document.getElementById("assignmentForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+function showStudent() {
+  document.getElementById("studentPanel").classList.remove("hidden");
+  document.getElementById("teacherPanel").classList.add("hidden");
+  loadAssignments();
+}
 
-  const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
-  const deadline = document.getElementById("deadline").value;
+function addQuestion() {
+  const type = document.getElementById("questionType").value;
+  const text = document.getElementById("questionText").value;
+  const marks = document.getElementById("marks").value;
 
-  assignments.push({
-    title,
-    description,
-    deadline,
-    submission: null
+  let question = { type, text, marks };
+
+  if (type === "mcq") {
+    const opts = [...document.querySelectorAll(".opt")].map(o => o.value);
+    const correct = document.getElementById("correctOpt").value.toUpperCase();
+    question.options = opts;
+    question.correct = correct;
+  }
+
+  questions.push(question);
+  renderTeacherQuestions();
+}
+
+function renderTeacherQuestions() {
+  const div = document.getElementById("teacherQuestions");
+  div.innerHTML = "";
+  questions.forEach((q, i) => {
+    div.innerHTML += `<div class="question-box">
+      <b>Q${i + 1} (${q.type})</b>: ${q.text}
+    </div>`;
   });
+}
 
+function saveAssignment() {
+  const title = document.getElementById("assignmentTitle").value;
+  assignments.push({ title, questions });
   localStorage.setItem("assignments", JSON.stringify(assignments));
-  e.target.reset();
-  renderAssignments();
-});
+  alert("Assignment Saved!");
+  questions = [];
+  renderTeacherQuestions();
+}
 
-function renderAssignments() {
-  assignmentList.innerHTML = "";
+function loadAssignments() {
+  const list = document.getElementById("assignmentList");
+  list.innerHTML = "";
+  assignments.forEach((a, i) => {
+    list.innerHTML += `<button onclick="attempt(${i})">${a.title}</button>`;
+  });
+}
 
-  assignments.forEach((a, index) => {
-    const today = new Date().toISOString().split("T")[0];
-    let status = "Not Submitted";
-    let statusClass = "";
+function attempt(index) {
+  const assignment = assignments[index];
+  const area = document.getElementById("attemptArea");
+  area.innerHTML = `<h3>${assignment.title}</h3>`;
 
-    if (a.submission) {
-      status = "Submitted";
-      statusClass = "submitted";
-    } else if (today > a.deadline) {
-      status = "Late";
-      statusClass = "late";
+  assignment.questions.forEach((q, i) => {
+    if (q.type === "mcq") {
+      area.innerHTML += `
+        <div>
+          <p>${q.text}</p>
+          ${q.options.map((o, idx) =>
+            `<label><input type="radio" name="q${i}" value="${String.fromCharCode(65+idx)}"/> ${o}</label>`
+          ).join("<br>")}
+        </div>`;
+    } else {
+      area.innerHTML += `
+        <div>
+          <p>${q.text}</p>
+          <textarea></textarea>
+        </div>`;
     }
-
-    assignmentList.innerHTML += `
-      <div class="assignment">
-        <h3>${a.title}</h3>
-        <p>${a.description}</p>
-        <p>Deadline: ${a.deadline}</p>
-        <p class="status ${statusClass}">Status: ${status}</p>
-        <button onclick="openModal(${index})">Submit</button>
-      </div>
-    `;
   });
+
+  area.innerHTML += `<button onclick="submit()">Submit Assignment</button>`;
 }
 
-function openModal(index) {
-  selectedAssignmentIndex = index;
-  modal.style.display = "flex";
+function submit() {
+  alert("Assignment submitted successfully!");
 }
-
-function closeModal() {
-  modal.style.display = "none";
-}
-
-function submitAssignment() {
-  const name = document.getElementById("studentName").value;
-  const file = document.getElementById("fileUpload").files[0];
-
-  if (!name || !file) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  if (!file.name.endsWith(".pdf")) {
-    alert("Only PDF files allowed");
-    return;
-  }
-
-  assignments[selectedAssignmentIndex].submission = {
-    student: name,
-    fileName: file.name,
-    submittedAt: new Date().toLocaleString()
-  };
-
-  localStorage.setItem("assignments", JSON.stringify(assignments));
-  closeModal();
-  renderAssignments();
-}
-
-renderAssignments();
