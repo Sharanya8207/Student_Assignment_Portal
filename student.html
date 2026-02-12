@@ -1,27 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <h2>Student Dashboard</h2>
-  <a href="index.html" class="logout">Logout</a>
-</header>
+<h2 id="welcome"></h2>
 
-<div class="container">
-  <div class="btn-group">
-    <button onclick="loadAssignments()">Assignments</button>
-    <button onclick="viewScores()">My Scores</button>
-  </div>
-
-  <div id="assignmentBox" class="card hidden"></div>
-  <div id="scoreBox" class="card hidden"></div>
-</div>
+<div id="assignments"></div>
 
 <script src="script.js"></script>
 </body>
