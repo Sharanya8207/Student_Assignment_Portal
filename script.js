@@ -1,77 +1,112 @@
 let assignments = JSON.parse(localStorage.getItem("assignments")) || [];
-let submissions = JSON.parse(localStorage.getItem("submissions")) || [];
+let results = JSON.parse(localStorage.getItem("results")) || [];
+let student = localStorage.getItem("student");
 
-/* ---------- TEACHER ---------- */
-function showCreate() {
-  toggle("createBox", true);
-  toggle("submissionsBox", false);
+/* -------- LOGIN -------- */
+function loginStudent() {
+  const name = document.getElementById("studentName").value;
+  if (!name) return alert("Enter name");
+  localStorage.setItem("student", name);
+  location.href = "student.html";
 }
 
-function addQuestion() {
-  const q = document.createElement("textarea");
-  q.placeholder = "Enter question";
+/* -------- TEACHER -------- */
+function addMCQ() {
+  const q = document.createElement("div");
+  q.className = "mcq";
+  q.innerHTML = `
+    <input placeholder="Question">
+    <input placeholder="Option A">
+    <input placeholder="Option B">
+    <input placeholder="Option C">
+    <input placeholder="Option D">
+    <input placeholder="Correct Option (A/B/C/D)">
+  `;
   document.getElementById("questions").appendChild(q);
 }
 
 function saveAssignment() {
-  const subject = document.getElementById("subject").value;
-  const title = document.getElementById("title").value;
-  const questions = [...document.querySelectorAll("#questions textarea")].map(q => q.value);
+  const subject = subject.value;
+  const title = title.value;
 
-  assignments.push({ subject, title, questions });
+  const qs = [...document.querySelectorAll(".mcq")].map(q => {
+    const inputs = q.querySelectorAll("input");
+    return {
+      question: inputs[0].value,
+      options: [
+        inputs[1].value,
+        inputs[2].value,
+        inputs[3].value,
+        inputs[4].value
+      ],
+      correct: inputs[5].value.toUpperCase()
+    };
+  });
+
+  assignments.push({ subject, title, questions: qs });
   localStorage.setItem("assignments", JSON.stringify(assignments));
-
-  alert("Assignment Created Successfully!");
+  alert("Assignment Created");
 }
 
-/* ---------- STUDENT ---------- */
-function loadAssignments() {
-  const box = document.getElementById("assignmentBox");
-  box.innerHTML = "<h3>Assignments</h3>";
+/* -------- STUDENT -------- */
+if (location.pathname.includes("student")) {
+  document.getElementById("welcome").innerText =
+    `Welcome ${student}`;
+
+  const box = document.getElementById("assignments");
 
   assignments.forEach((a, i) => {
     box.innerHTML += `
-      <div class="card">
-        <b>${a.subject}</b> - ${a.title}
-        <button onclick="attempt(${i})">Attempt</button>
-      </div>`;
+      <button onclick="attempt(${i})">${a.subject} - ${a.title}</button>
+    `;
   });
-
-  toggle("assignmentBox", true);
 }
 
 function attempt(i) {
   const a = assignments[i];
-  const box = document.getElementById("assignmentBox");
   let html = `<h3>${a.title}</h3>`;
-
-  a.questions.forEach(q => {
-    html += `<p>${q}</p><textarea></textarea>`;
+  a.questions.forEach((q, idx) => {
+    html += `
+      <div class="mcq">
+        <p>${q.question}</p>
+        ${q.options.map((o, j) =>
+          `<label><input type="radio" name="q${idx}" value="${"ABCD"[j]}"> ${o}</label><br>`
+        ).join("")}
+      </div>`;
   });
 
-  html += `<button class="primary" onclick="submit('${a.title}')">Submit</button>`;
-  box.innerHTML = html;
+  html += `<button onclick="submit(${i})">Submit</button>`;
+  document.body.innerHTML = html;
 }
 
-function submit(title) {
-  const marks = Math.floor(Math.random() * 30) + 70;
-  submissions.push({ title, marks });
-  localStorage.setItem("submissions", JSON.stringify(submissions));
-  alert("Submitted Successfully!");
-}
+function submit(i) {
+  const a = assignments[i];
+  let score = 0;
 
-function viewScores() {
-  const box = document.getElementById("scoreBox");
-  box.innerHTML = "<h3>My Scores</h3>";
-
-  submissions.forEach(s => {
-    box.innerHTML += `<p>${s.title} → ${s.marks}</p>`;
+  a.questions.forEach((q, idx) => {
+    const ans = document.querySelector(`input[name=q${idx}]:checked`);
+    if (ans && ans.value === q.correct) score++;
   });
 
-  toggle("scoreBox", true);
+  results.push({
+    studentName: student,
+    subject: a.subject,
+    title: a.title,
+    score,
+    total: a.questions.length
+  });
+
+  localStorage.setItem("results", JSON.stringify(results));
+  alert(`Score: ${score}/${a.questions.length}`);
+  location.reload();
 }
 
-/* UTIL */
-function toggle(id, show) {
-  document.getElementById(id).classList.toggle("hidden", !show);
+/* -------- RESULTS (TEACHER) -------- */
+if (location.pathname.includes("teacher")) {
+  const resBox = document.getElementById("results");
+  results.forEach(r => {
+    resBox.innerHTML += `
+      <p>${r.studentName} | ${r.subject} | ${r.score}/${r.total}</p>
+    `;
+  });
 }
