@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Teacher Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Teacher Dashboard</h2>
-
-<div class="menu">
-  <button onclick="showCreate()">Create Assignment</button>
-  <button onclick="viewSubmissions()">View Submissions</button>
+<header class="topbar">
+  <h2>Teacher Dashboard</h2>
   <a href="index.html" class="logout">Logout</a>
+</header>
+
+<div class="container">
+  <div class="btn-group">
+    <button onclick="showCreate()">Create Assignment</button>
+    <button onclick="viewSubmissions()">View Submissions</button>
+  </div>
+
+  <div id="createBox" class="card hidden">
+    <h3>Create Assignment</h3>
+
+    <input id="subject" placeholder="Subject Name">
+    <input id="title" placeholder="Assignment Title">
+
+    <div id="questions"></div>
+
+    <button class="secondary" onclick="addQuestion()">➕ Add Question</button>
+    <button class="primary" onclick="saveAssignment()">💾 Save Assignment</button>
+  </div>
+
+  <div id="submissionsBox" class="card hidden"></div>
 </div>
-
-<div id="createBox" class="card hidden">
-  <h3>Create Assignment</h3>
-  <input id="subject" placeholder="Subject">
-  <input id="title" placeholder="Assignment Title">
-
-  <div id="questions"></div>
-  <button onclick="addQuestion()">Add Question</button>
-  <button class="primary" onclick="saveAssignment()">Save</button>
-</div>
-
-<div id="submissionsBox" class="card hidden"></div>
 
 <script src="script.js"></script>
 </body>
