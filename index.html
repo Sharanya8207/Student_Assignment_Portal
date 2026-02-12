@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Assignment Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>📚 Student Assignment Submission Portal</h1>
+
+    <!-- Assignment Creation -->
+    <section class="card">
+      <h2>Create Assignment (Teacher)</h2>
+      <form id="assignmentForm">
+        <input type="text" id="title" placeholder="Assignment Title" required />
+        <textarea id="description" placeholder="Assignment Description" required></textarea>
+        <input type="date" id="deadline" required />
+        <button type="submit">Create Assignment</button>
+      </form>
+    </section>
+
+    <!-- Assignment List -->
+    <section class="card">
+      <h2>Assignments</h2>
+      <div id="assignmentList"></div>
+    </section>
+
+    <!-- Submission Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Submit Assignment</h2>
+        <input type="text" id="studentName" placeholder="Student Name" />
+        <input type="file" id="fileUpload" accept=".pdf" />
+        <button onclick="submitAssignment()">Submit</button>
+        <button class="close" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
