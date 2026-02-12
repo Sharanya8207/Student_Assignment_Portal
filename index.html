@@ -1,26 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Education Portal</title>
+  <title>LMS Portal</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container center">
-  <h1>Education Portal</h1>
-  <p class="subtitle">Choose your role</p>
+<div class="center container">
+  <h1>LMS Portal</h1>
 
-  <div class="role-grid">
-    <a href="teacher.html" class="role-card teacher">
-      👩‍🏫 Teacher
-    </a>
-    <a href="student.html" class="role-card student">
-      🎓 Student
-    </a>
+  <input id="studentName" placeholder="Enter Student Name">
+
+  <div class="btn-group">
+    <button onclick="loginStudent()">Student Login</button>
+    <a href="teacher.html" class="btn">Teacher Login</a>
   </div>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>
